@@ -35,7 +35,7 @@ const int Height = 200;
 
 const int Width= 1000;
 
-CanvasRenderingContext2D context ;
+
 
 
 @Component(
@@ -43,8 +43,10 @@ CanvasRenderingContext2D context ;
     templateUrl: 'packages/mathlets/conditionalconvergence.html',
     cssUrl: 'packages/mathlets/conditionalconvergence.css',
     publishAs: 'cmp')
-class ConditionalConvergence{
+class ConditionalConvergence extends ShadowRootAware{
   double accuExp = 0.0;
+  
+  CanvasRenderingContext2D context ;
   
   var spacing = 5;
 
@@ -53,6 +55,13 @@ class ConditionalConvergence{
   String targettxt;
 
   num target() => double.parse(targettxt);
+
+  void onShadowRoot(ShadowRoot shadowRoot){
+//    accuExp = 2.0;
+    CanvasRenderingContext2D context =
+          (shadowRoot.querySelector("#canvas") as CanvasElement).context2D;
+    drawLine(1,1, 20, 20, "red");
+  }
   
   String result() =>
     "result" + printSeq(approxSeq(target(), example, pow(10.0, accuExp)));
@@ -72,11 +81,11 @@ class ConditionalConvergence{
     List<double> accum = [0.0];
     double sum = 0.0;
     
-    
+    /*
     context.clearRect(0, 0, Width, Height);
     drawLine(0, 0, Width, 0, "black");
     drawLine(0, target, Width, target, "red", 2);
-
+*/
 
     for (var n=1; (target - sum).abs() > error; n++){
       if (include(sum, target, seq(n))) {
@@ -90,11 +99,12 @@ class ConditionalConvergence{
     return accum;
   }
   
+  /*
   ConditionalConvergence(){
     CanvasRenderingContext2D context =
       (querySelector("#canvas") as CanvasElement).context2D;
   }
-
+*/
 }
 
 
