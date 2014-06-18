@@ -83,7 +83,7 @@ class ConditionalConvergence extends Object with ShadowRootAware{
     }
   
   String result() =>
-    printSeq(approxSeq(target(), example, accuExp));
+    printSeq(approxSeq(targettxt, example, accuExp));
 
 
   void drawLine(num x1, y1, num x2, num y2, String colour, [num width = 1]){
@@ -96,12 +96,12 @@ class ConditionalConvergence extends Object with ShadowRootAware{
            ..stroke();
   }
 
-  List<double> approxSeq(double target, Sequence seq, int acc){
+  List<double> approxSeq(String targettxt, Sequence seq, int acc){
 //    return [target, acc.toDouble()];
     double error = pow(2.0, -acc.toDouble());
     List<double> accum = [0.0];
     double sum = 0.0;
-    
+    double target = double.parse(targettxt);
     
     context.clearRect(0.0, 0.0, Width, Height);
     drawLine(0.0, 0.0, Width, 0.0, "black");
