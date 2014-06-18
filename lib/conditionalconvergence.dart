@@ -44,13 +44,26 @@ const int Width= 1000;
     cssUrl: 'packages/mathlets/conditionalconvergence.css',
     publishAs: 'cmp')
 class ConditionalConvergence extends Object with ShadowRootAware{
-  double accuExp = 0.0;
+  num accuExp =0.0;
+  
+//  double err() => double.parse(accuExp);
   
   CanvasRenderingContext2D context ;
   
   var spacing = 5.0;
 
   var yscale = 15.0;
+  
+  @NgAttr('init-target')
+  set initTarget(String t){
+    targettxt = t;
+  }
+  
+  @NgAttr('init-accuracy')
+  set initAccuracy(String t){
+    accuExp = double.parse(t);
+  }
+ 
   
   String targettxt;
 
@@ -70,7 +83,7 @@ class ConditionalConvergence extends Object with ShadowRootAware{
     }
   
   String result() =>
-    "result" + printSeq(approxSeq(target(), example, pow(10.0, accuExp)));
+    printSeq(approxSeq(targettxt, example, accuExp));
 
 
   void drawLine(num x1, y1, num x2, num y2, String colour, [num width = 1]){
@@ -83,33 +96,35 @@ class ConditionalConvergence extends Object with ShadowRootAware{
            ..stroke();
   }
 
-  List<double> approxSeq(double target, Sequence seq, double error){
+  List<double> approxSeq(String targettxt, Sequence seq, int acc){
+//    return [target, acc.toDouble()];
+    double error = pow(2.0, -acc.toDouble());
     List<double> accum = [0.0];
     double sum = 0.0;
-    
+    double target = double.parse(targettxt);
     
     context.clearRect(0.0, 0.0, Width, Height);
     drawLine(0.0, 0.0, Width, 0.0, "black");
     drawLine(0, target, Width, target, "red", 2.0);
 
+//    return [target, acc.toDouble(), error];
 
     for (var n=1; (target - sum).abs() > error; n++){
       if (include(sum, target, seq(n))) {
         accum.add(seq(n));
         sum += seq(n);
- //       drawLine(n * spacing, 0.0, n* spacing, sum, "blue");
+        drawLine(n * spacing, 0.0, n* spacing, sum, "blue");
       }
       
     }
     accum[0] = sum;
-//    return [target, error];
+//    return [sum, target, acc.toDouble(), error];
     return accum;
   }
   
   /*
   ConditionalConvergence(){
-    CanvasRenderingContext2D context =
-      (querySelector("#canvas") as CanvasElement).context2D;
+    result();
   }
 */
 }
