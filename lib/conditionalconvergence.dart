@@ -102,7 +102,7 @@ class ConditionalConvergence extends Object with ShadowRootAware{
       
     }
     accum[0] = sum;
-    return [target, error];
+//    return [target, error];
     return accum;
   }
   
