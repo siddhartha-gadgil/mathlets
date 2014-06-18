@@ -1,0 +1,30 @@
+<div>
+  <div>
+      <b>Target:</b><input type="text" ng-model="cmp.targettxt">
+      </div>
+
+      <br>
+    <div id="accuracy">
+      <b>Accuracy (on logarithmic scale):</b> 2 <sup id="exp">-{{cmp.accuExp}}</sup>
+      </div>
+      
+      <div><input type="range" min="0" max ="10" ng-model="cmp.accuExp"></div>
+    <button type="button" ng-click="cmp.setdummy()">Show result</button>
+   
+    <div>   
+    <canvas id="canvas" width="1000" height="200" class="center", style="border:1px solid #00ffff;">
+      </canvas>
+    <br><br> 
+    <div style="float:left">
+    Y-scale: <input id="yscale" type="range" min="1" max="2000" value="15" ng-model="cmp.yscale">
+    &nbsp; &nbsp;
+    Spacing: <input id="spacing" type="range" min="1" max="100" value="2" ng-model ="cmp.spacing"> 
+    </div>
+    <br><br>
+    <p></p>
+    <div id ="result">
+    {{cmp.result()}}
+    </div>
+</div></div>
+    
+
