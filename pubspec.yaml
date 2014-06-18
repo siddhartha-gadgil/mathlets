@@ -1,6 +1,6 @@
 name: mathlets
-description: Web components for mathematics
 version: 0.0.1
+description: Web components for mathematics
 dependencies:
   angular: 0.10.0
   shadow_dom: any

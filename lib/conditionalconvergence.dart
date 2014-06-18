@@ -11,7 +11,7 @@ bool include(double sum, target, element){
 
 
 Sequence example = (int n){
-  if (n % 2 ==1) {return (-1)/n;} else return 1/n;
+  if (n % 2 ==1) {return (-1.0)/n;} else return 1.0/n;
 };
 
 String oneovern(double x){
@@ -43,14 +43,14 @@ const int Width= 1000;
     templateUrl: 'packages/mathlets/conditionalconvergence.html',
     cssUrl: 'packages/mathlets/conditionalconvergence.css',
     publishAs: 'cmp')
-class ConditionalConvergence extends ShadowRootAware{
+class ConditionalConvergence extends Object with ShadowRootAware{
   double accuExp = 0.0;
   
   CanvasRenderingContext2D context ;
   
-  var spacing = 5;
+  var spacing = 5.0;
 
-  var yscale = 15;
+  var yscale = 15.0;
   
   String targettxt;
 
@@ -58,10 +58,16 @@ class ConditionalConvergence extends ShadowRootAware{
 
   void onShadowRoot(ShadowRoot shadowRoot){
 //    accuExp = 2.0;
-    CanvasRenderingContext2D context =
-          (shadowRoot.querySelector("#canvas") as CanvasElement).context2D;
-    drawLine(1,1, 20, 20, "red");
+    CanvasElement canvas =
+          shadowRoot.querySelector("#canvas");
+    initCanvas(canvas);
+    context.save();
+//    drawLine(1,1, 20, 20, "red");
   }
+  
+  void initCanvas(CanvasElement canvas) {
+       context = canvas.context2D;
+    }
   
   String result() =>
     "result" + printSeq(approxSeq(target(), example, pow(10.0, accuExp)));
@@ -81,21 +87,22 @@ class ConditionalConvergence extends ShadowRootAware{
     List<double> accum = [0.0];
     double sum = 0.0;
     
-    /*
-    context.clearRect(0, 0, Width, Height);
-    drawLine(0, 0, Width, 0, "black");
-    drawLine(0, target, Width, target, "red", 2);
-*/
+    
+    context.clearRect(0.0, 0.0, Width, Height);
+    drawLine(0.0, 0.0, Width, 0.0, "black");
+    drawLine(0, target, Width, target, "red", 2.0);
+
 
     for (var n=1; (target - sum).abs() > error; n++){
       if (include(sum, target, seq(n))) {
         accum.add(seq(n));
         sum += seq(n);
-     //   drawLine(n * spacing, 0, n* spacing, sum, "blue");
+ //       drawLine(n * spacing, 0.0, n* spacing, sum, "blue");
       }
       
     }
     accum[0] = sum;
+    return [target, error];
     return accum;
   }
   
