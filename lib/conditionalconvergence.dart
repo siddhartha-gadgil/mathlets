@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:math';
+import 'package:angular/angular.dart';
 
 typedef double Sequence(int n);
 
@@ -7,28 +8,10 @@ bool include(double sum, target, element){
   if ((target - sum - element).abs() < (target - sum).abs()) {return true;} else return false;
 }
 
-List<double> approxSeq(double target, Sequence seq, double error){
-  List<double> accum = [0.0];
-  double sum = 0.0;
-  
-  context.clearRect(0, 0, Width, Height);
-  drawLine(0, 0, Width, 0, "black");
-  drawLine(0, target, Width, target, "red", 2);
 
-  for (var n=1; (target - sum).abs() > error; n++){
-    if (include(sum, target, seq(n))) {
-      accum.add(seq(n));
-      sum += seq(n);
-      drawLine(n * spacing, 0, n* spacing, sum, "blue");
-    }
-    
-  }
-  accum[0] = sum;
-  return accum;
-}
 
 Sequence example = (int n){
-  if (n % 2 ==1) {return (-1)/n;} else return 1/n;
+  if (n % 2 ==1) {return (-1.0)/n;} else return 1.0/n;
 };
 
 String oneovern(double x){
@@ -45,72 +28,91 @@ String printSeq(List<double> seq){
   return sum.toString() + " = " + elems.reduce((a, b) => a + " + " + b);
 }
 
-double target(){
-  InputElement targ = querySelector("#target");
-  var result;
-  try {result = double.parse(targ.value);
-      }
-  on FormatException {
-    result =0.0 ;
-  }
-  return result;
-}
 
-double accuExp = 0.0;
 
-void accuInp(){
-  var accuInp = new RangeInputElement();
-  accuInp..min = "0.0"
-         ..max ="3.0"
-         ..value="0.0"
-         ..step="0.1";
-  
-  accuInp.onChange.listen((Event e){
-    accuExp = - double.parse(accuInp.value);
-    querySelector("#exp").text = accuExp.toString();
-    result();
-  });
-  querySelector("#accu").children.add(accuInp);
-}
-
-void result(){
-  querySelector("#result").text = printSeq(approxSeq(target(), example, pow(10.0, accuExp)));  
-}
-
-final CanvasRenderingContext2D context =
-(querySelector("#canvas") as CanvasElement).context2D;
-
-var spacing = 5;
-
-var yScale = 15;
 
 const int Height = 200;
 
 const int Width= 1000;
 
-void drawLine(num x1, y1, num x2, num y2, String colour, [num width = 1]){
-  context..beginPath()
-         ..lineWidth = width
-         ..strokeStyle = colour
-         ..moveTo(x1,  - (y1 * yScale) + Height/2)
-         ..lineTo(x2, - (y2 * yScale) + Height/2)
-         ..closePath()
-         ..stroke();
+
+
+
+@Component(
+    selector: 'condconv',
+    templateUrl: 'packages/mathlets/conditionalconvergence.html',
+    cssUrl: 'packages/mathlets/conditionalconvergence.css',
+    publishAs: 'cmp')
+class ConditionalConvergence extends Object with ShadowRootAware{
+  double accuExp = 0.0;
+  
+  CanvasRenderingContext2D context ;
+  
+  var spacing = 5.0;
+
+  var yscale = 15.0;
+  
+  String targettxt;
+
+  num target() => double.parse(targettxt);
+
+  void onShadowRoot(ShadowRoot shadowRoot){
+//    accuExp = 2.0;
+    CanvasElement canvas =
+          shadowRoot.querySelector("#canvas");
+    initCanvas(canvas);
+    context.save();
+//    drawLine(1,1, 20, 20, "red");
+  }
+  
+  void initCanvas(CanvasElement canvas) {
+       context = canvas.context2D;
+    }
+  
+  String result() =>
+    "result" + printSeq(approxSeq(target(), example, pow(10.0, accuExp)));
+
+
+  void drawLine(num x1, y1, num x2, num y2, String colour, [num width = 1]){
+    context..beginPath()
+           ..lineWidth = width
+           ..strokeStyle = colour
+           ..moveTo(x1,  - (y1 * yscale) + Height/2)
+           ..lineTo(x2, - (y2 * yscale) + Height/2)
+           ..closePath()
+           ..stroke();
+  }
+
+  List<double> approxSeq(double target, Sequence seq, double error){
+    List<double> accum = [0.0];
+    double sum = 0.0;
+    
+    
+    context.clearRect(0.0, 0.0, Width, Height);
+    drawLine(0.0, 0.0, Width, 0.0, "black");
+    drawLine(0, target, Width, target, "red", 2.0);
+
+
+    for (var n=1; (target - sum).abs() > error; n++){
+      if (include(sum, target, seq(n))) {
+        accum.add(seq(n));
+        sum += seq(n);
+ //       drawLine(n * spacing, 0.0, n* spacing, sum, "blue");
+      }
+      
+    }
+    accum[0] = sum;
+    return [target, error];
+    return accum;
+  }
+  
+  /*
+  ConditionalConvergence(){
+    CanvasRenderingContext2D context =
+      (querySelector("#canvas") as CanvasElement).context2D;
+  }
+*/
 }
 
-void main() {
-  accuInp();
-  drawLine(0, 0, Width, 0, "black");
-  querySelector("#work").onClick.listen((Event e) => result());
-  querySelector("#yscale").onChange.listen((Event e){
-    yScale = int.parse((querySelector("#yscale") as InputElement).value);
-    result();
-  });
-  querySelector("#spacing").onChange.listen((Event e){
-    spacing = int.parse((querySelector("#spacing") as InputElement).value);
-    result();
-  });
-  querySelector("#target").onChange.listen((Event e) => result());
-}
 
 

@@ -1,12 +1,15 @@
 <div>
-  <div id="targ">
-      <b>Target:</b><input id="target">
+  <div>
+      <b>Target:</b><input type="text" ng-model="cmp.targettxt">
       </div>
+      {{cmp.target()}}
+      {{cmp.result()}}
       <br>
     <div id="accuracy">
-      <b>Accuracy (on logarithmic scale):</b> 10 <sup id="exp">-0.0</sup>
+      <b>Accuracy (on logarithmic scale):</b> 10 <sup id="exp">-{{cmp.accuExp}}</sup>
       </div>
-      <div id="accu"></div>
+      
+      <div><input type="range" min="0.0" max ="3.0" step ="0.1" ng-model="cmp.accuExp"></div>
     
     <br>
     <button type="button" id="work">Find subsequence</button>
@@ -17,10 +20,12 @@
       </canvas>
     <br><br> 
     <div style="float:left">
-    Y-scale: <input id="yscale" type="range" min="1" max="2000" value="15">
+    Y-scale: <input id="yscale" type="range" min="1" max="2000" value="15" ng-model="cmp.yscale">
     &nbsp; &nbsp;
-    Spacing: <input id="spacing" type="range" min="1" max="100" value="2"> 
+    Spacing: <input id="spacing" type="range" min="1" max="100" value="2" ng-model ="cmp.spacing"> 
     </div>
     </div>
+    {{cmp.result()}}
 </div>
+    
 
