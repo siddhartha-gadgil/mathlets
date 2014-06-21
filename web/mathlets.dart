@@ -1,6 +1,7 @@
 //import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:angular/application_factory.dart';
+//import 'package:angular/application_factory_static.dart';
 import 'package:mathlets/conditionalconvergence.dart';
 
 class MathletsModule extends Module {
