@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Conditional Convergence</title>
+    <link rel="stylesheet" href="conditionalconvergence.css">
+    <script src="angular.min.js"></script>
+    <script src="conditionalconvergence.js"></script>
+  </head>
+  <body>
+    <h1>Conditional Convergence</h1>
+    <p>
+      We illustrate the result that if a series is conditionally convergent (i.e., convergent but not absoutely convergent), then
+    there is a subseries that converges to any desired real number (target)
+    for the sequence ((-1)^n)/n.
+    </p>
+    <p>
+      Specify the target and the desired accuracy to get a partial sum of a subseries that is within the specified error of the target.
+      Note that this partial sum is obtained by including a term if and only if it results in a better approximation of the target,
+      so as the accuracy tends to zero we do get an infinte subseries (i.e., we get partial sums of a fixed subseries).
+      </p>
+    <br>
+<div ng-controller="CondConvController">
+    <div id="targ">
+      <b>Target:</b><input id="target" ng-model="target">
+      </div>
+      <br>
+    <div id="accuracy">{{target}}
+      <b>Accuracy (on logarithmic scale): <input type="range" min="0" max="60" value="10" ng-model="accuexp"> </b> 10
+        <sup id="exp">-{{accuexp/10}}</sup>
+      </div>
+      <div id="accu"></div>
+
+    <br>
+    <button type="button" id="work">Find subsequence</button>
+    <br><br>
+
+    <div>
+    <canvas id="canvas" width="1000" height="200" class="center", style="border:1px solid #00ffff;">
+      </canvas>
+    <br><br>
+    <div style="float:left">
+    Y-scale: <input id="yscale" type="range" min="1" max="2000" value="15" ng-model = "yscale">
+    &nbsp; &nbsp;
+    Spacing: <input id="spacing" type="range" min="1" max="20" value="5" ng-model="spacing">
+    </div>
+    </div>
+
+    <br><br>
+    <div id="sample_container_id">
+      <p id="result">{{result()}}</p>
+    </div>
+
+
+</div>
+  </body>
+</html>
